@@ -8,6 +8,15 @@ pipeline {
                 checkout scm
             }
         }
+        
+        stage('Terraform Destroy') {
+            steps {
+                echo 'Destroying Terraform resources...'
+                script {
+                    sh 'terraform destroy -input=false -auto-approve'
+                }
+            }
+        }
         stage('Terraform Init') {
             steps {
                 echo 'Initializing Terraform...'
@@ -21,14 +30,6 @@ pipeline {
                 echo 'Running Terraform plan...'
                 script {
                     sh 'terraform plan -input=false -out=tfplan'
-                }
-            }
-        }
-        stage('Terraform Destroy') {
-            steps {
-                echo 'Destroying Terraform resources...'
-                script {
-                    sh 'terraform destroy -input=false -auto-approve'
                 }
             }
         }
